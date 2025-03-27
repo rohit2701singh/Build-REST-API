@@ -1,0 +1,65 @@
+#----------- Sqlalchemy Query Result To Dictionary -------------------
+
+def to_dict(self):
+    dictionary = {}
+    # Loop through each column in the data record
+
+    for column in self.__table__.columns:
+
+        # Create a new dictionary entry where the key is the name of the column and the value is the value of the column
+
+        dictionary[column.name] = getattr(self, column.name)
+    return dictionary
+
+print(dictionary):
+{
+    "id": 1,
+    "name": "Cafe X",
+    "map_url": "map.com",
+    "img_url": "img.com",
+    "location": "NYC",
+    "seats": "20",
+    "has_toilet": True,
+    "has_wifi": True,
+    "has_sockets": False,
+    "can_take_calls": True,
+    "coffee_price": "$5"
+}
+
+
+@app.route("/all")
+def get_all_cafes():
+    all_cafes = db.session.execute(db.select(Cafe).order_by(Cafe.id)).scalars().all()
+    # print(all_cafes)
+    return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
+
+print(all_cafes) -> [<Cafe 1>, <Cafe 3>, <Cafe 4>,........, <Cafe 25>, <Cafe 26>]
+
+
+# self.__table__.columns is an SQLAlchemy feature that returns all columns of the Cafe table
+
+print(self.__table__.columns)
+result: ReadOnlyColumnCollection(cafe.id, cafe.name, cafe.map_url, cafe.img_url, cafe.location, cafe.seats, 
+    cafe.has_toilet, cafe.has_wifi, cafe.has_sockets, cafe.can_take_calls, cafe.coffee_price)
+
+
+print(column)
+result: cafe.id 
+(in next iteration cafe.name, then cafe.map_url)
+
+
+# column.name gives the column name as a string (e.g., "id", "name", "map_url", etc.)
+print(column.name)
+result: id
+(in next iteration name, then map_url)
+
+
+# getattr(self, column.name) fetches the value of that column for the specific cafe instance
+# getattr(cafe, "name") is the same as cafe.name
+# getattr(object, attribute) is python built-in function returns the value of the specified attribute from the specified object
+
+print(getattr(self, column.name))
+result: get actual data associated with that column
+    12 (this is value associated with id)
+    Forage Cafe (value associated with name)
+    https://goo.gl/maps/HC4e9FJL48kLRH8W9 (value associated with map_url)

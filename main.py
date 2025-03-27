@@ -28,13 +28,13 @@ class Cafe(db.Model):
         dictionary = {}
         # Loop through each column in the data record
         for column in self.__table__.columns:
-            # print(column)
-            # Create a new dictionary entry;
-            # where the key is the name of the column
+            # print(column, column.name)
+            # Create a new dictionary entry where the key is the name of the column
             # and the value is the value of the column
+
             dictionary[column.name] = getattr(self, column.name)
         return dictionary
-
+        
         # return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
 
@@ -82,7 +82,7 @@ def get_all_cafes():
 
 @app.route("/search")
 def search_cafe_at_location():
-    query_location = request.args.get("loc") or request.form.get("loc")  # http://127.0.0.1:5000/search?loc=London
+    query_location = request.args.get("loc") # http://127.0.0.1:5000/search?loc=London
     all_cafes = db.session.execute(db.select(Cafe).where(Cafe.location == query_location)).scalars().all()
     if all_cafes:   # if list not empty
         return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])

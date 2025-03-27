@@ -24,16 +24,16 @@
         </form> 
 
         <form class="form-container add" method="POST" action="{{ url_for('post_new_cafe') }}">
-            <input type="text" name="name", placeholder="cafe name"></input>   
-            <input type="text" name="map_url", placeholder="map url"></input> 
-            <input type="text" name="img_url", placeholder="image url"></input>
-            <input type="text" name="loc", placeholder="location"></input>
-            <input type="number" name="sockets", placeholder="has sockets(0 or 1)"></input>
-            <input type="number" name="toilet", placeholder="has toilet(0 or 1)"></input>
-            <input type="number" name="wifi", placeholder="has wifi(0 or 1)"></input>
-            <input type="number" name="calls", placeholder="calls(0 for no or 1 for yes)"></input>
-            <input type="text" name="seats", placeholder="number of seats"></input>
-            <input type="text" name="coffee_price", placeholder="coffee price"></input></br>
+            <input type="text" name="name", placeholder="cafe name" required></input>   
+            <input type="text" name="map_url", placeholder="map url" required></input> 
+            <input type="text" name="img_url", placeholder="image url" required></input>
+            <input type="text" name="loc", placeholder="location" required></input>
+            <input type="number" name="sockets", placeholder="has sockets(0 or 1)" required></input>
+            <input type="number" name="toilet", placeholder="has toilet(0 or 1)" required></input>
+            <input type="number" name="wifi", placeholder="has wifi(0 or 1)" required></input>
+            <input type="number" name="calls", placeholder="calls(0 for no or 1 for yes)" required></input>
+            <input type="text" name="seats", placeholder="number of seats" required></input>
+            <input type="text" name="coffee_price", placeholder="coffee price" required></input></br>
             <button type="submit">Add Cafe</button>
         </form> 
     </div>
