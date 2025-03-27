@@ -1,0 +1,62 @@
+body {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: flex-start;  /* Aligns content to the top */
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+.container {
+    text-align: center;
+    background: white;
+    padding: 10px;
+    margin-top: 50px; /* Adjust distance from the top */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+a:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    margin-top: 20px;
+    padding: 8px;
+}
+
+input {
+    margin-top: auto;
+    margin-bottom: 10px; /* Adds space between input and button */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: auto;  /* Adjust width based on content */
+    padding: 10px 20px; /* Reduce padding */
+    font-size: 14px; /* Reduce text size */
+}
+
+button {
+    background-color: #007bff; /* Same as <a> tag */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none; /* Remove default button styles */
+    display: inline-block;
+    padding: 8px 16px; /* Reduce padding */
+    font-size: 14px; /* Reduce text size */
+    width: auto; /* Adjust width to fit content */
+}
+
+button:hover {
+    background-color: #0056b3; /* Hover effect same as <a> */
+}

@@ -82,7 +82,7 @@ def get_all_cafes():
 
 @app.route("/search")
 def search_cafe_at_location():
-    query_location = request.args.get("loc")    # http://127.0.0.1:5000/search?loc=London
+    query_location = request.args.get("loc") or request.form.get("loc")  # http://127.0.0.1:5000/search?loc=London
     all_cafes = db.session.execute(db.select(Cafe).where(Cafe.location == query_location)).scalars().all()
     if all_cafes:   # if list not empty
         return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
@@ -91,6 +91,9 @@ def search_cafe_at_location():
 
 
 # --------------- HTTP POST - Create Record---------------
+
+# Test this inside Postman. Request type: Post ->  Body ->  x-www-form-urlencoded
+
 @app.route("/add", methods=["POST"])
 def post_new_cafe():
     new_cafe = Cafe(
@@ -98,38 +101,53 @@ def post_new_cafe():
         map_url=request.form.get("map_url"),
         img_url=request.form.get("img_url"),
         location=request.form.get("loc"),
-        has_sockets=bool(request.form.get("sockets")),
-        has_toilet=bool(request.form.get("toilet")),
-        has_wifi=bool(request.form.get("wifi")),
-        can_take_calls=bool(request.form.get("calls")),
+        has_sockets=bool(int(request.form.get("sockets"))), # user will put 0 for False and 1 for True
+        has_toilet=bool(int(request.form.get("toilet"))),
+        has_wifi=bool(int(request.form.get("wifi"))),
+        can_take_calls=bool(int(request.form.get("calls"))),
         seats=request.form.get("seats"),
         coffee_price=request.form.get("coffee_price"),
     )
     db.session.add(new_cafe)
     db.session.commit()
-    return jsonify(response={"success": "Successfully added the new cafe."})
+    return jsonify(response={"success": "Successfully added the new cafe."}), 200
 
 
 # ------------HTTP PUT/PATCH - Update Record------------
-@app.route("/update-price/<int:cafe_id>", methods=["GET", "PATCH"])    # http://127.0.0.1:5000/update-price/63?new_price=$25
-def patch_new_price(cafe_id):
+
+# we can only use the GET and POST methods from a browser, while PATCH and DELETE cannot be used 
+# However, if we want to test from browser we can use methods=["GET","PATCH"]
+
+# Note that since we have used GET with both PATCH and DELETE, if we test your API from Postman without changing the method to DELETE, 
+# we will still be able to delete or update data using the GET method.
+# data received from form will always be a string
+
+# http://127.0.0.1:5000/update-price/63?new_price=$25
+
+@app.route("/update-price", methods=["GET","PATCH"])
+def patch_new_price():
+    cafe_id = int(request.args.get("cafe_id"))
     new_price = request.args.get("new_price")
-    # cafe = db.get_or_404(Cafe, cafe_id)
+
     cafe = db.session.execute(db.select(Cafe).where(Cafe.id == cafe_id)).scalar()
     if cafe:
         cafe.coffee_price = new_price
         db.session.commit()
-        # Just add the code after the jsonify method. 200 = Ok
-        return jsonify(response={"success": "Successfully updated the price."}), 200
+        return jsonify(response={"success": f"Successfully updated the coffee price for id {cafe_id}-'{cafe.name}'."}), 200
     else:
         # 404 = Resource not found
-        return jsonify(error={"Not Found": f"Sorry a cafe with id '{cafe_id}' was not found in the database."}), 404
+        return jsonify(error={"Not Found": f"Sorry a cafe with id '{cafe_id}' was not found."}), 404
+
 
 
 # ----------------HTTP DELETE - Delete Record-----------------
-@app.route("/delete_record/<int:cafe_id>",  methods=["GET", "DELETE"])
+
+# request.headers.get("api_key") to access the API key. when sending the API key from Postman,
+# we can include it in the headers instead of the query parameters, which is a more secure approach.
+
+@app.route("/delete-record/<int:cafe_id>",  methods=["GET", "DELETE"])
 def delete_record(cafe_id):
-    api_key = request.args.get("api_key")
+    api_key = request.args.get("api_key") or request.headers.get("api_key")
     if api_key == "TopSecretAPIKey":
 
         cafe = db.session.execute(db.select(Cafe).where(Cafe.id == cafe_id)).scalar()
@@ -137,10 +155,8 @@ def delete_record(cafe_id):
             cafe_name = cafe.name
             db.session.delete(cafe)
             db.session.commit()
-            # Just add the code after the jsonify method. 200 = Ok
             return jsonify(response={"success": f"Successfully deleted cafe id- {cafe_id},'{cafe_name}' record."}), 200
         else:
-            # 404 = Resource not found
             return jsonify(error={"Not Found": f"Sorry a cafe with id '{cafe_id}' was not found in the database."}), 404
 
     else:

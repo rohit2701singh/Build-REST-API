@@ -2,9 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cafe&Wifi API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Wifi API</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
-    <h1>Welcome to the Cafe & Wifi API</h1>
+    <div class="container">
+        <h1>Welcome to the Cafe & Wifi API</h1>
+        <a href="{{ url_for('get_random_cafe') }}">Get Random Cafe</a></br>
+        <a href="{{ url_for('get_all_cafes') }}">Get All Cafes</a></br>  
+
+        <form class="form-container" method="GET" action="{{ url_for('search_cafe_at_location') }}">
+            <input type="text" name="loc", placeholder="search cafe at location" required></input>
+            <button type="submit">Search</button>
+        </form>  
+
+        <form class="form-container" method="GET" action="{{ url_for('patch_new_price') }}">
+            <input type="number" name="cafe_id" placeholder="cafe id" required>
+            <input type="text" name="new_price", placeholder="new price" required></input>
+            <button type="submit">Update Coffee Price</button>
+        </form> 
+
+        <form class="form-container add" method="POST" action="{{ url_for('post_new_cafe') }}">
+            <input type="text" name="name", placeholder="cafe name"></input>   
+            <input type="text" name="map_url", placeholder="map url"></input> 
+            <input type="text" name="img_url", placeholder="image url"></input>
+            <input type="text" name="loc", placeholder="location"></input>
+            <input type="number" name="sockets", placeholder="has sockets(0 or 1)"></input>
+            <input type="number" name="toilet", placeholder="has toilet(0 or 1)"></input>
+            <input type="number" name="wifi", placeholder="has wifi(0 or 1)"></input>
+            <input type="number" name="calls", placeholder="calls(0 for no or 1 for yes)"></input>
+            <input type="text" name="seats", placeholder="number of seats"></input>
+            <input type="text" name="coffee_price", placeholder="coffee price"></input></br>
+            <button type="submit">Add Cafe</button>
+        </form> 
+    </div>
 </body>
 </html>
